@@ -47,7 +47,7 @@ jobs:
           less README.Unix.txt && \
           export CFLAGS="-m32" && \
           export CPPFLAGS="-m32" && \
-          ./configure && \
+          ./configure --host=i386-linux-gnu "CFLAGS=-m32" "CXXFLAGS=-m32" "LDFLAGS=-m32" && \
           make && \
           sudo make install
           
@@ -65,7 +65,7 @@ jobs:
           sudo chmod +x ./configure && \
           export CFLAGS="-m32" && \
           export CPPFLAGS="-m32" && \
-          ./configure --prefix="$(pwd)/dillo-installation" && \
+          ./configure --host=i386-linux-gnu "CFLAGS=-m32" "CXXFLAGS=-m32" "LDFLAGS=-m32" --prefix="$(pwd)/dillo-installation" && \
           make && \
           sudo make install-strip && \
           sudo chmod 777 -R . && \
