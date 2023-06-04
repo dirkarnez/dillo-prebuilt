@@ -22,6 +22,7 @@ jobs:
 
     steps:
       - shell: bash
+        if: ${{ matrix.container == 'ubuntu-latest' }}
         run: |
           sudo apt-get install build-essential xorg-dev libx11-dev libcairo2-dev && \
           curl -L -O -J https://www.fltk.org/pub/fltk/1.3.3/fltk-1.3.3-source.tar.gz && \
@@ -47,7 +48,8 @@ jobs:
           workspace=$(pwd) && \
           sudo apt-get update && \
           sudo apt-get install gcc-multilib g++-multilib && \
-          ./configure --prefix="$(pwd)/dillo-installation" && \
+          ls && \
+          sudo ./configure --prefix="$(pwd)/dillo-installation" && \
           make && \
           sudo make install-strip
           
