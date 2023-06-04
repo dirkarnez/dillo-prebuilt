@@ -1,0 +1,61 @@
+name: cpp-cmake-prebuilt-release-actions-workflow
+
+on:
+  push:
+    # Sequence of patterns matched against refs/tags
+    tags:
+      - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
+      - 'c*'
+      
+jobs:
+  build:
+    strategy:
+      matrix:
+        container: [ ubuntu-latest ] # [p, macos-latest, windows-latest ]
+        build_type: [ Release ]
+
+
+    # The CMake configure and build commands are platform agnostic and should work equally well on Windows or Mac.
+    # You can convert this to a matrix build if you need cross-platform coverage.
+    # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
+    runs-on: ${{ matrix.container }}
+
+    steps:
+      - shell: bash
+        run: |
+          curl -L -O -J https://www.fltk.org/pub/fltk/1.3.3/fltk-1.3.3-source.tar.gz && \
+          cd fltk-1.3.3 && \
+          less README.Unix.txt && \
+          make && \
+          sudo make install
+          
+      - uses: actions/checkout@v3
+      
+      - name: Configure Ubuntu
+        if: ${{ matrix.container == 'ubuntu-latest' }}
+        shell: bash
+        # Configure CMake in a 'buildX' subdirectory.
+        # We can't use `build` as `BUILD` is already taken by the bazel build file.
+        # On Mac and Windows this leads to a conflict.
+        run: |
+          workspace=$(pwd) && \
+          sudo apt-get update && \
+          sudo apt-get install gcc-multilib g++-multilib && \
+          ./configure --prefix="$(pwd)/dillo-installation" && \
+          make && \
+          sudo make install-strip
+          
+      - if: ${{ matrix.container == 'ubuntu-latest' }}
+        name: Archive Release for Ubuntu
+        uses: thedoctor0/zip-release@master
+        with:
+          type: 'zip'
+          directory: "dillo-installation"
+          filename: i386-dillo-${{ github.ref_name }}-ubuntu-gcc-11.3.0.zip
+          
+      - name: Release prebuilt
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "dillo-installation/i386-dillo-${{ github.ref_name }}-ubuntu-gcc-11.3.0.zip"
+          allowUpdates: true
+          token: ${{ secrets.GITHUB_TOKEN }}
