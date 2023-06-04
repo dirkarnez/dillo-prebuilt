@@ -21,6 +21,16 @@ jobs:
     runs-on: ${{ matrix.container }}
 
     steps:
+      - name: Setup GCC
+        uses: Dup4/actions-setup-gcc@v1
+        with:
+          version: 9.2
+    
+      - shell: bash
+        if: ${{ matrix.container == 'ubuntu-latest' }}
+        run: |
+          gcc --version
+          
       - shell: bash
         if: ${{ matrix.container == 'ubuntu-latest' }}
         run: |
