@@ -73,11 +73,11 @@ jobs:
         with:
           type: 'zip'
           directory: "dillo-installation"
-          filename: i386-dillo-${{ github.ref_name }}-ubuntu-gcc-11.3.0.zip
+          filename: "i386-dillo-${{ github.ref_name }}-ubuntu-gcc-$(gcc --version).zip"
           
       - name: Release prebuilt
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "dillo-installation/i386-dillo-${{ github.ref_name }}-ubuntu-gcc-11.3.0.zip"
+          artifacts: "dillo-installation/i386-dillo-${{ github.ref_name }}-ubuntu-gcc-$(gcc --version).zip"
           allowUpdates: true
           token: ${{ secrets.GITHUB_TOKEN }}
