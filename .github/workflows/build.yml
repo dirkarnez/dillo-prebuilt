@@ -63,7 +63,9 @@ jobs:
           chmod +x ./configure && \
           ./configure --prefix="$(pwd)/dillo-installation" && \
           make && \
-          sudo make install-strip
+          sudo make install-strip && \
+          chmod 777 -R . && \
+          ls
           
       - if: ${{ matrix.container == 'ubuntu-latest' }}
         name: Archive Release for Ubuntu
