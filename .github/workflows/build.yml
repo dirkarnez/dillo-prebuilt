@@ -60,11 +60,11 @@ jobs:
           workspace=$(pwd) && \
           sudo apt-get install gcc-multilib g++-multilib && \
           ls && \
-          chmod +x ./configure && \
+          sudo chmod +x ./configure && \
           ./configure --prefix="$(pwd)/dillo-installation" && \
           make && \
           sudo make install-strip && \
-          chmod 777 -R . && \
+          sudo chmod 777 -R . && \
           ls
           
       - if: ${{ matrix.container == 'ubuntu-latest' }}
