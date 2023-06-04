@@ -47,8 +47,7 @@ jobs:
           less README.Unix.txt && \
           export CFLAGS="-m32" && \
           export CPPFLAGS="-m32" && \
-          ./configure --host=i386-linux-gnu --build=i386-linux-gnu --target=i386-linux-gnu "CFLAGS=-m32" "CXXFLAGS=-m32" "LDFLAGS=-m32" && \
-          less config.log && \
+          (./configure --host=i386-linux-gnu --build=i386-linux-gnu --target=i386-linux-gnu "CFLAGS=-m32" "CXXFLAGS=-m32" "LDFLAGS=-m32" || less config.log) && \
           make && \
           sudo make install
           
