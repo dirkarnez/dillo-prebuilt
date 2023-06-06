@@ -35,8 +35,11 @@ jobs:
       - shell: bash
         if: ${{ matrix.container == 'ubuntu-latest' }}
         run: |
+          sudo dpkg --add-architecture i386 && \
+          sudo dpkg --remove-architecture amd64 && \
+          sudo dpkg --print-architecture && \
+          sudo dpkg --print-foreign-architectures && \
           sudo apt-get update && \
-          sudo dpkg --add-architecture i386
           sudo apt-get install build-essential xorg-dev libx11-dev libcairo2-dev libc6-dev-i386 && \
           sudo apt-get install  libxext-dev libxft-dev libxinerama-dev libpng-dev libjpeg-dev libgl1-mesa-dev libglu1-mesa-dev && \
           sudo apt-get install gcc-multilib g++-multilib && \
