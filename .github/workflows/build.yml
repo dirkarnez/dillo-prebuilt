@@ -45,13 +45,23 @@ jobs:
           cd src && \
           sed -i "s/if\s*(\s*from_parent->deparent\s*(\s*from\s*)\s*<\s*0\s*).*/if ( from_parent->deparent(from) == 0 ) /" Fl_Tree_Item.cxx && \
           cd .. && \
-          less README.Unix.txt && \
-          export CFLAGS="-m32" && \
-          export CPPFLAGS="-m32" && \
-          (./configure --host=i386-linux-gnu --build=i386-linux-gnu --target=i386-linux-gnu "CFLAGS=-m32" "CXXFLAGS=-m32" "LDFLAGS=-m32" || less config.log) && \
-          make && \
-          sudo make install
+          less README.Unix.txt
           
+      - uses: fastai/workflows/ssh@master
+        with:
+          ssh_key: ${{ secrets.SSH_KEY }}
+          key_file: id_ecdsa
+  #     - uses: actions/checkout@v2
+  #     - run: source script-linux.sh
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@master
+      
+#           export CFLAGS="-m32" && \
+#           export CPPFLAGS="-m32" && \
+#           (./configure --host=i386-linux-gnu --build=i386-linux-gnu --target=i386-linux-gnu "CFLAGS=-m32" "CXXFLAGS=-m32" "LDFLAGS=-m32" || less config.log) && \
+#           make && \
+#           sudo make install
+
       - uses: actions/checkout@v3
       
       - name: Configure Ubuntu
